@@ -9,5 +9,5 @@
 #  updated_at    :datetime         not null
 #
 class BillingRateByDay < ApplicationRecord
-  belongs_to :billable, polymorphic: true
+  belongs_to :billable, polymorphic: true, dependent: :destroy
 end

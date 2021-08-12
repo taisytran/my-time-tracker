@@ -19,6 +19,8 @@ class TimeSheetEntry < ApplicationRecord
   validate :validate_finish_time_gt_start_time
   validate :validate_entry_date_in_future
 
+  after_create :calculate_hour_billed
+
   # TODO: store billing_rate_by_day_id
 
   private
@@ -47,5 +49,14 @@ class TimeSheetEntry < ApplicationRecord
     return if date_of_entry < Time.current.to_date
 
     errors.add(:base, "Date of entry can not be in future")
+  end
+
+  def calculate_hour_billed
+    rate_or_err, ok = RateService.new(self).execute
+    if ok
+      update(hour_billed: rate_or_err)
+    else
+      errors.add(:base, rate_or_err)
+    end
   end
 end

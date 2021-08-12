@@ -16,7 +16,7 @@ class BillingRateDayOfWeek < ApplicationRecord
 
   DAY_OF_WEEK = %w(monday tuesday wednesday thurday friday)
 
-  # TODO: add status active/inactive to make sure once we update the new rate, the old one is still here
+  # TODO: handle soft delete for the old ones
 
   class << self
     DAY_OF_WEEK.each do |weekday|
