@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.5'
+ruby '2.6.8'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.0.4'
@@ -30,6 +30,8 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 # Template engine
 gem 'slim-rails'
+
+gem 'pg', '~> 1.2'
 
 group :development, :test do
   # Fixtures replacement

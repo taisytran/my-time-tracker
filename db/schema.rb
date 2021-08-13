@@ -12,9 +12,12 @@
 
 ActiveRecord::Schema.define(version: 2021_08_12_041808) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "billing_rate_by_days", force: :cascade do |t|
     t.string "billable_type"
-    t.integer "billable_id"
+    t.bigint "billable_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["billable_type", "billable_id"], name: "index_billing_rate_by_days_on_billable_type_and_billable_id"
