@@ -1,8 +1,8 @@
 # my-time-tracker
 Time sheet entry tracking
 
-[](./style-guides/screen_shot_01.png)
-[](./style-guides/screen_shot_02.png)
+![a](./style-guides/screen_shot_01.png)
+![b](.//style-guides/screen_shot_02.png)
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
