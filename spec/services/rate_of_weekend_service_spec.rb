@@ -4,11 +4,12 @@ RSpec.describe RateOfWeekendService, type: :service do
   describe "#execute" do
     context "Time sheet entry is on the weekend" do
       it "returns data correctly" do
-        billing_rate_day_of_weekend = create(
-          :billing_rate_day_of_weekend,
+        billing_rate_weekend = create(
+          :billing_rate_weekend,
+          day: "sunday",
           rate_per_hour: 47
         )
-        BillingRateByDay.create(billable: billing_rate_day_of_weekend)
+        BillingRateByDay.create(billable: billing_rate_weekend)
 
         ts_entry = create(
           :time_sheet_entry,
@@ -18,6 +19,7 @@ RSpec.describe RateOfWeekendService, type: :service do
         )
 
         total_rate, ok = described_class.new(
+          entry_day: "sunday",
           entry_start_time: ts_entry.start_time,
           entry_finish_time: ts_entry.finish_time
         ).execute

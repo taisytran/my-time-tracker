@@ -7,9 +7,17 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #
-class BillingRateDayOfWeekend < ApplicationRecord
+class BillingRateWeekend < ApplicationRecord
   has_one :billing_rate_by_day,  as: :billable
 
   FIXED_RATE = 47
-  DAY_OF_WEEKEND = %w(saturday sunday)
+  DAYS = %w(saturday sunday)
+
+  class << self
+    DAYS.each do |day|
+      define_method day do
+        find_by_day(day)
+      end
+    end
+  end
 end

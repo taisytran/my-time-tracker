@@ -13,5 +13,5 @@
 #
 require 'rails_helper'
 
-RSpec.describe BillingRateDayOfWeek, type: :model do
+RSpec.describe BillingRateWeekday, type: :model do
 end

@@ -11,17 +11,17 @@
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #
-class BillingRateDayOfWeek < ApplicationRecord
-  has_one :billing_rate_by_day,  as: :billable
+class BillingRateWeekday < ApplicationRecord
+  DAYS = %w(monday tuesday wednesday thurday friday)
 
-  DAY_OF_WEEK = %w(monday tuesday wednesday thurday friday)
+  has_one :billing_rate_by_day,  as: :billable
 
   # TODO: handle soft delete for the old ones
 
   class << self
-    DAY_OF_WEEK.each do |weekday|
-      define_method :"#{weekday}" do
-        find_by_day_of_week(weekday)
+    DAYS.each do |day|
+      define_method day do
+        find_by_day(day)
       end
     end
   end

@@ -4,15 +4,15 @@ RSpec.describe RateOfWeekdayService, type: :service do
   describe "#execute" do
     context "Time sheet entry is in period of working hours" do
       it "returns data correctly" do
-        billing_rate_day_of_week = create(
-          :billing_rate_day_of_week,
-          day_of_week: "monday",
+        billing_rate_weekday = create(
+          :billing_rate_weekday,
+          day: "monday",
           start_working_time: "8:00am",
           finish_working_time: "18:00pm",
           inside_rate_per_hour: 10,
           outside_rate_per_hour: 20
         )
-        BillingRateByDay.create(billable: billing_rate_day_of_week)
+        BillingRateByDay.create(billable: billing_rate_weekday)
 
         ts_entry = build(
           :time_sheet_entry,
@@ -22,7 +22,7 @@ RSpec.describe RateOfWeekdayService, type: :service do
         )
 
         total_rate, ok = described_class.new(
-          weekday_name: "monday",
+          entry_day: "monday",
           entry_start_time: ts_entry.start_time,
           entry_finish_time: ts_entry.finish_time
         ).execute
@@ -34,15 +34,15 @@ RSpec.describe RateOfWeekdayService, type: :service do
 
     context "Time sheet entry started before begin of working hours and end sooner" do
       it "returns data correctly" do
-        billing_rate_day_of_week = create(
-          :billing_rate_day_of_week,
-          day_of_week: "monday",
+        billing_rate_weekday = create(
+          :billing_rate_weekday,
+          day: "monday",
           start_working_time: "8:00am",
           finish_working_time: "18:00pm",
           inside_rate_per_hour: 10,
           outside_rate_per_hour: 20
         )
-        BillingRateByDay.create(billable: billing_rate_day_of_week)
+        BillingRateByDay.create(billable: billing_rate_weekday)
 
         ts_entry = build(
           :time_sheet_entry,
@@ -52,7 +52,7 @@ RSpec.describe RateOfWeekdayService, type: :service do
         )
 
         total_rate, ok = described_class.new(
-          weekday_name: "monday",
+          entry_day: "monday",
           entry_start_time: ts_entry.start_time,
           entry_finish_time: ts_entry.finish_time
         ).execute
@@ -64,15 +64,15 @@ RSpec.describe RateOfWeekdayService, type: :service do
 
     context "Time sheet entry started after begin of working hours and end later" do
       it "returns data correctly" do
-        billing_rate_day_of_week = create(
-          :billing_rate_day_of_week,
-          day_of_week: "monday",
+        billing_rate_weekday = create(
+          :billing_rate_weekday,
+          day: "monday",
           start_working_time: "8:00am",
           finish_working_time: "18:00pm",
           inside_rate_per_hour: 10,
           outside_rate_per_hour: 20
         )
-        BillingRateByDay.create(billable: billing_rate_day_of_week)
+        BillingRateByDay.create(billable: billing_rate_weekday)
 
         ts_entry = build(
           :time_sheet_entry,
@@ -82,7 +82,7 @@ RSpec.describe RateOfWeekdayService, type: :service do
         )
 
         total_rate, ok = described_class.new(
-          weekday_name: "monday",
+          entry_day: "monday",
           entry_start_time: ts_entry.start_time,
           entry_finish_time: ts_entry.finish_time
         ).execute
@@ -94,15 +94,15 @@ RSpec.describe RateOfWeekdayService, type: :service do
 
     context "Time sheet entry of finish time less than begin of working hour" do
       it "returns data correctly" do
-        billing_rate_day_of_week = create(
-          :billing_rate_day_of_week,
-          day_of_week: "monday",
+        billing_rate_weekday = create(
+          :billing_rate_weekday,
+          day: "monday",
           start_working_time: "8:00am",
           finish_working_time: "18:00pm",
           inside_rate_per_hour: 10,
           outside_rate_per_hour: 20
         )
-        BillingRateByDay.create(billable: billing_rate_day_of_week)
+        BillingRateByDay.create(billable: billing_rate_weekday)
 
         ts_entry = build(
           :time_sheet_entry,
@@ -112,7 +112,7 @@ RSpec.describe RateOfWeekdayService, type: :service do
         )
 
         total_rate, ok = described_class.new(
-          weekday_name: "monday",
+          entry_day: "monday",
           entry_start_time: ts_entry.start_time,
           entry_finish_time: ts_entry.finish_time
         ).execute
@@ -124,15 +124,15 @@ RSpec.describe RateOfWeekdayService, type: :service do
 
     context "Time sheet entry of start time greater than end of working hour" do
       it "returns data correctly" do
-        billing_rate_day_of_week = create(
-          :billing_rate_day_of_week,
-          day_of_week: "monday",
+        billing_rate_weekday = create(
+          :billing_rate_weekday,
+          day: "monday",
           start_working_time: "8:00am",
           finish_working_time: "18:00pm",
           inside_rate_per_hour: 10,
           outside_rate_per_hour: 20
         )
-        BillingRateByDay.create(billable: billing_rate_day_of_week)
+        BillingRateByDay.create(billable: billing_rate_weekday)
 
         ts_entry = build(
           :time_sheet_entry,
@@ -142,7 +142,7 @@ RSpec.describe RateOfWeekdayService, type: :service do
         )
 
         total_rate, ok = described_class.new(
-          weekday_name: "monday",
+          entry_day: "monday",
           entry_start_time: ts_entry.start_time,
           entry_finish_time: ts_entry.finish_time
         ).execute
