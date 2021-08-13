@@ -7,6 +7,15 @@ Time sheet entry tracking
 ### Prerequisites
 - Ruby 2.6.8
 - Postgres ~> 9.6
+- NodeJS ~> 14.17.3
+- Yarn ~> 1.22.10
+- Bundler ~> 2.2.25
+
+### Dependencies installation
+```
+bundle install
+yarn install
+```
 
 ### Database initialization & Seeding
 ```
