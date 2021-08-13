@@ -1,11 +1,15 @@
 class RateService
   attr_accessor :time_sheet_entry
 
+  class RateNotFound < StandardError; end
+
   def initialize(time_sheet_entry)
     @time_sheet_entry = time_sheet_entry
   end
 
   def execute
+    raise RateNotFound, "Rate calculation have not created yet" unless BillingRateByDay.any?
+
     rate_or_err_message, ok = nil
     params = {
       entry_day: entry_day,

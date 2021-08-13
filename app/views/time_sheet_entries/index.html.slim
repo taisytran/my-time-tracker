@@ -1,0 +1,17 @@
+.row.mb-3
+  .btn-group.col-sm-4
+    = link_to "Create Timesheet Entry", new_time_sheet_entry_path, class: "btn btn-primary btn-lg"
+
+.row
+  h5 Timesheet Entries
+  ul.list-group.list-group-flush.p-2
+    - @time_sheet_entries.each do |time_sheet_entry|
+      li.list-group-item
+      span
+        = format_date(time_sheet_entry.date_of_entry)
+        | &nbsp;
+        span
+          | #{format_time(time_sheet_entry.start_time, time_sheet_entry.finish_time)}
+          | &nbsp;
+          span
+            | #{number_to_currency(time_sheet_entry.hour_billed)}

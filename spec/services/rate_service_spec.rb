@@ -4,7 +4,8 @@ RSpec.describe RateService, type: :service do
   describe "#execute" do
     context "Time sheet entry is a day of week" do
       it "returns output correctly" do
-        time_sheet_entry = create(:time_sheet_entry, date_of_entry: "2021-08-11")
+        allow(BillingRateByDay).to receive(:any?).and_return true
+        time_sheet_entry = build(:time_sheet_entry, date_of_entry: "2021-08-11")
 
         allow_any_instance_of(RateOfWeekdayService).to receive(:execute).and_return [100, true]
         service = described_class.new(time_sheet_entry)
@@ -19,7 +20,8 @@ RSpec.describe RateService, type: :service do
 
     context "Time sheet entry is a day of weekend" do
       it "returns output correctly" do
-        time_sheet_entry = create(:time_sheet_entry, date_of_entry: "2021-08-01")
+        allow(BillingRateByDay).to receive(:any?).and_return true
+        time_sheet_entry = build(:time_sheet_entry, date_of_entry: "2021-08-01")
 
         allow_any_instance_of(RateOfWeekendService).to receive(:execute).and_return [100, true]
         service = described_class.new(time_sheet_entry)

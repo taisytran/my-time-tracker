@@ -1,6 +1,9 @@
 class RateOfWeekdayService
   attr_accessor :billing_rate_weekday, :entry_start_time, :entry_finish_time
 
+  class RateNotFoundForWeekday < StandardError; end
+  class EntryTimeNotPresence < StandardError; end
+
   def initialize(entry_day:, entry_start_time:, entry_finish_time:)
     @billing_rate_weekday = BillingRateWeekday.send(entry_day)
     @entry_start_time = entry_start_time
@@ -8,6 +11,9 @@ class RateOfWeekdayService
   end
 
   def execute
+    raise RateNotFoundForWeekday, "Missing rate for weekdays" if missing_rate?
+    raise EntryTimeNotPresence, "Start Time or Finish time are empty" if missing_entry_time?
+
     total_inside_hours_rate = total_inside_working_hours * billing_rate_weekday.inside_rate_per_hour
     total_outside_hours_rate = total_outside_working_hours * billing_rate_weekday.outside_rate_per_hour
     total_rate = total_inside_hours_rate + total_outside_hours_rate
@@ -18,6 +24,14 @@ class RateOfWeekdayService
   end
 
   private
+
+  def missing_rate?
+    billing_rate_weekday.blank?
+  end
+
+  def missing_entry_time?
+    entry_start_time.blank? || entry_finish_time.blank?
+  end
 
   def total_inside_working_hours
     return 0.0 if outside_working_hours?

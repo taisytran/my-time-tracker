@@ -19,7 +19,7 @@ class TimeSheetEntry < ApplicationRecord
   validate :validate_finish_time_gt_start_time
   validate :validate_entry_date_in_future
 
-  after_create :calculate_hour_billed
+  after_validation :calculate_hour_billed
 
   # TODO: store billing_rate_by_day_id
 
@@ -54,7 +54,7 @@ class TimeSheetEntry < ApplicationRecord
   def calculate_hour_billed
     rate_or_err, ok = RateService.new(self).execute
     if ok
-      update(hour_billed: rate_or_err)
+      self.hour_billed = rate_or_err
     else
       errors.add(:base, rate_or_err)
     end
