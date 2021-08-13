@@ -11,18 +11,7 @@
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #
-class BillingRateDayOfWeek < ApplicationRecord
-  has_one :billing_rate_by_day,  as: :billable
+require 'rails_helper'
 
-  DAY_OF_WEEK = %w(monday tuesday wednesday thurday friday)
-
-  # TODO: add status active/inactive to make sure once we update the new rate, the old one is still here
-
-  class << self
-    DAY_OF_WEEK.each do |weekday|
-      define_method :"#{weekday}" do
-        find_by_day_of_week(weekday)
-      end
-    end
-  end
+RSpec.describe BillingRateWeekday, type: :model do
 end

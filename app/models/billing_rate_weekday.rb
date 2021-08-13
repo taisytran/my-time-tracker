@@ -11,7 +11,18 @@
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #
-require 'rails_helper'
+class BillingRateWeekday < ApplicationRecord
+  DAYS = %w(monday tuesday wednesday thurday friday)
 
-RSpec.describe BillingRateDayOfWeek, type: :model do
+  has_one :billing_rate_by_day,  as: :billable
+
+  # TODO: handle soft delete for the old ones
+
+  class << self
+    DAYS.each do |day|
+      define_method day do
+        find_by_day(day)
+      end
+    end
+  end
 end

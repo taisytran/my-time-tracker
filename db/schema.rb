@@ -13,24 +13,26 @@
 ActiveRecord::Schema.define(version: 2021_08_12_041808) do
 
   create_table "billing_rate_by_days", force: :cascade do |t|
-    t.integer "billable_id"
     t.string "billable_type"
+    t.integer "billable_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["billable_type", "billable_id"], name: "index_billing_rate_by_days_on_billable_type_and_billable_id"
   end
 
-  create_table "billing_rate_day_of_weekends", force: :cascade do |t|
-    t.decimal "rate_per_hour", precision: 8, scale: 2, default: "0.0"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "billing_rate_day_of_weeks", force: :cascade do |t|
-    t.string "day_of_week"
+  create_table "billing_rate_weekdays", force: :cascade do |t|
+    t.string "day"
     t.time "start_working_time"
     t.time "finish_working_time"
     t.decimal "inside_rate_per_hour", precision: 8, scale: 2, default: "0.0"
     t.decimal "outside_rate_per_hour", precision: 8, scale: 2, default: "0.0"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "billing_rate_weekends", force: :cascade do |t|
+    t.string "day"
+    t.decimal "rate_per_hour", precision: 8, scale: 2, default: "0.0"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
