@@ -12,7 +12,7 @@
 #  updated_at            :datetime         not null
 #
 class BillingRateWeekday < ApplicationRecord
-  DAYS = %w(monday tuesday wednesday thurday friday)
+  DAYS = %w(monday tuesday wednesday thursday friday)
 
   has_one :billing_rate_by_day,  as: :billable
 

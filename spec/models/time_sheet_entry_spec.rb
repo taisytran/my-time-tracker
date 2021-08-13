@@ -63,7 +63,7 @@ RSpec.describe TimeSheetEntry, type: :model do
   describe "#Examples" do
     before do
       %w(monday wednesday friday).each do |day|
-        billing_rate_day_of_week = create(
+        billing_rate_weekday = create(
           :billing_rate_weekday,
           day: day,
           start_working_time: "7am",
@@ -71,11 +71,11 @@ RSpec.describe TimeSheetEntry, type: :model do
           inside_rate_per_hour: 22,
           outside_rate_per_hour: 34
         )
-        BillingRateByDay.create(billable: billing_rate_day_of_week)
+        BillingRateByDay.create(billable: billing_rate_weekday)
       end
 
       %w(tuesday thursday).each do |day|
-        billing_rate_day_of_week = create(
+        billing_rate_weekday = create(
           :billing_rate_weekday,
           day: day,
           start_working_time: "5am",
@@ -83,16 +83,16 @@ RSpec.describe TimeSheetEntry, type: :model do
           inside_rate_per_hour: 25,
           outside_rate_per_hour: 35
         )
-        BillingRateByDay.create(billable: billing_rate_day_of_week)
+        BillingRateByDay.create(billable: billing_rate_weekday)
       end
 
       %w(saturday sunday).each do |day|
-        billing_rate_day_of_weekend = create(
+        billing_rate_weekend = create(
           :billing_rate_weekend,
           day: day,
           rate_per_hour: 47
         )
-        BillingRateByDay.create(billable: billing_rate_day_of_weekend)
+        BillingRateByDay.create(billable: billing_rate_weekend)
       end
     end
 

@@ -1,0 +1,18 @@
+h3.mb-3 Create Timesheet Entry
+= form_with model: @time_sheet_entry, local: true do |f|
+  .form-group.row.mb-3
+    = f.label :date_of_entry, class: "col-sm-2 col-form-label"
+    .col-sm-3
+      = f.text_field :date_of_entry, class: "form-control flatpickr", data: { behavior: "flatpickr" },
+        placeholder: "dd-mm-YY", required: true
+  .form-group.row.mb-3
+    = f.label :start_time, class: "col-sm-2 col-form-label"
+    .col-sm-3
+      = f.time_field :start_time, class: "form-control", required: true
+  .form-group.row.mb-3
+    = f.label :finish_time, class: "col-sm-2 col-form-label"
+    .col-sm-3
+      = f.time_field :finish_time, class: "form-control", required: true
+  .form-group.row
+    .col-sm-10
+      = f.submit "Submit", class: "btn btn-primary"

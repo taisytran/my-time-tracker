@@ -1,7 +1,35 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+BillingRateByDay.destroy_all
+
+puts "Generating default Billing rate by day..."
+
+%w(monday wednesday friday).each do |day|
+  billind_rate_weekday = BillingRateWeekday.create(
+    day: day,
+    start_working_time: "7am",
+    finish_working_time: "7pm",
+    inside_rate_per_hour: 22,
+    outside_rate_per_hour: 34
+  )
+  BillingRateByDay.create(billable: billind_rate_weekday)
+end
+
+%w(tuesday thursday).each do |day|
+  billing_rate_weekday  = BillingRateWeekday.create(
+    day: day,
+    start_working_time: "5am",
+    finish_working_time: "5pm",
+    inside_rate_per_hour: 25,
+    outside_rate_per_hour: 35
+  )
+  BillingRateByDay.create(billable: billing_rate_weekday)
+end
+
+%w(saturday sunday).each do |day|
+  billing_rate_weekend = BillingRateWeekend.create(
+    day: day,
+    rate_per_hour: 47
+  )
+  BillingRateByDay.create(billable: billing_rate_weekend)
+end
+
+puts "Done!!!"
