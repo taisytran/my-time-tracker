@@ -4,6 +4,8 @@ class RateOfWeekdayService
   class RateNotFoundForWeekday < StandardError; end
   class EntryTimeNotPresence < StandardError; end
 
+  REGULAR_RATE = 1.5
+
   def initialize(entry_day:, entry_start_time:, entry_finish_time:)
     @billing_rate_weekday = BillingRateWeekday.send(entry_day)
     @entry_start_time = entry_start_time
@@ -16,6 +18,13 @@ class RateOfWeekdayService
 
     total_inside_hours_rate = total_inside_working_hours * billing_rate_weekday.inside_rate_per_hour
     total_outside_hours_rate = total_outside_working_hours * billing_rate_weekday.outside_rate_per_hour
+
+    # TODO split to service
+    if overtime?
+      total_inside_hours_rate = ((total_inside_hours_rate - total_inside_rate_for_first_four_hours) * REGULAR_RATE) + total_inside_rate_for_first_four_hours
+      total_outside_hours_rate = total_outside_rate_at_begin + total_outside_rate_at_end
+    end
+
     total_rate = total_inside_hours_rate + total_outside_hours_rate
 
     [total_rate, true]
@@ -57,5 +66,47 @@ class RateOfWeekdayService
   def outside_working_hours?
     entry_finish_time < billing_rate_weekday.start_working_time ||
       entry_start_time > billing_rate_weekday.finish_working_time
+  end
+
+  def overtime?
+    ENV["OVERTIME_EXPERIMENT_ENABLED"] == "true"  && entry_finish_time - entry_start_time > 4
+  end
+
+  def total_inside_rate_for_first_four_hours
+    billing_rate_weekday.inside_rate_per_hour * total_inside_hours_for_first_hour_hours
+  end
+
+  def total_inside_hours_for_first_hour_hours
+    (entry_start_time + 4.hours - [entry_start_time, billing_rate_weekday.start_working_time].max) / 3600
+  end
+
+  def overtime_rate_for_outside
+    ot_regular_rate = REGULAR_RATE * billing_rate_weekday.inside_rate_per_hour
+    if billing_rate_weekday.outside_rate_per_hour > ot_regular_rate
+      ot_regular_rate = billing_rate_weekday.outside_rate_per_hour
+    end
+
+    ot_regular_rate
+  end
+
+  def total_outside_hours_at_begin
+    hours = 0
+    if billing_rate_weekday.start_working_time > entry_start_time
+      hours = (billing_rate_weekday.start_working_time - entry_start_time) / 3600
+    end
+
+    hours
+  end
+
+  def total_outside_hours_at_end
+    total_outside_working_hours - total_outside_hours_at_begin
+  end
+
+  def total_outside_rate_at_begin
+    total_outside_hours_at_begin * billing_rate_weekday.outside_rate_per_hour
+  end
+
+  def total_outside_rate_at_end
+    total_outside_hours_at_end * overtime_rate_for_outside
   end
 end

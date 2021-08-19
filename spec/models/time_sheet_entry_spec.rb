@@ -155,5 +155,70 @@ RSpec.describe TimeSheetEntry, type: :model do
         expect(time_sheet_entry.hour_billed).to eq 136
       end
     end
+
+    describe "Overtime extension", :overtime_enabled do
+      context "2021-04-06 12:00 - 20:15" do
+        it "total rate is $259.23" do
+          time_sheet_entry = create(
+            :time_sheet_entry,
+            date_of_entry: "2021-04-06",
+            start_time: "12:00",
+            finish_time: "20:15"
+          )
+          expect(time_sheet_entry.hour_billed).to eq 259.38
+        end
+      end
+
+
+      context "2021-04-05 10:00 - 17:00" do
+        it "total rate is $187" do
+          time_sheet_entry = create(
+            :time_sheet_entry,
+            date_of_entry: "2021-04-05",
+            start_time: "10:00",
+            finish_time: "17:00"
+          )
+          expect(time_sheet_entry.hour_billed).to eq 187
+        end
+      end
+
+      context "2021-04-07 4:00 - 21:30" do
+        it "total rate is $572" do
+          time_sheet_entry = create(
+            :time_sheet_entry,
+            date_of_entry: "2021-04-07",
+            start_time: "4:00",
+            finish_time: "21:30"
+          )
+          expect(time_sheet_entry.hour_billed).to eq 572
+        end
+      end
+
+      context "2021-04-10 15:30 - 20:00" do
+        it "total rate is $223.25" do
+          time_sheet_entry = create(
+            :time_sheet_entry,
+            date_of_entry: "2021-04-10",
+            start_time: "15:30",
+            finish_time: "20:00"
+          )
+          expect(time_sheet_entry.hour_billed).to eq 223.25
+        end
+      end
+
+      context "2021-04-07 4:00 - 21:30, outsite rate < inside rate * 1.5" do
+        it "total rate is $557.5" do
+          BillingRateWeekday.wednesday.update(outside_rate_per_hour: 30)
+
+          time_sheet_entry = create(
+            :time_sheet_entry,
+            date_of_entry: "2021-04-07",
+            start_time: "4:00",
+            finish_time: "21:30"
+          )
+          expect(time_sheet_entry.hour_billed).to eq 557.5 # ($30 * 3hrs) + ($22 * 1hrs) + ($22 * 1.5 * 11 hrs) + ($22 * 1.5 * 2.5hrs)
+        end
+      end
+    end
   end
 end
