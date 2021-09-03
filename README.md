@@ -37,5 +37,4 @@ rails s
 ### Demo
 heroku: https://desolate-stream-54002.herokuapp.com/
 
-aws: http://18.188.214.43/
 
